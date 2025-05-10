@@ -7,8 +7,8 @@
   <link rel="icon" type="image/x-icon" href="imgs/favicon.ico">
 </head>
 <body class="bg-gradient-to-r from-blue-100 to-indigo-200 min-h-screen flex flex-col items-center justify-center px-4">
-  <div class="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full text-center mb-16">
-    <h1 class="text-2xl font-bold text-indigo-700 mb-6">¿Dónde estoy?</h1>
+  <div class="bg-white shadow-xl rounded-2xl p-8 max-w-4xl w-full text-center mb-16">
+    <h1 class="text-3xl font-bold text-indigo-700 mb-6">¿Dónde estoy?</h1>
 
     <label class="block mb-4 text-left font-medium text-gray-700" for="linea">
       Seleccioná la línea de tren:
@@ -25,7 +25,13 @@
       Detectar estación
     </button>
 
-    <div id="resultado" class="mt-6 text-lg font-medium text-gray-800"></div>
+    <div id="resultado" class="mt-6 text-xl font-medium text-gray-800"></div>
+
+    <div id="planoContainer" class="relative w-full max-w-6xl mx-auto mt-6 hidden">
+      <img id="planoImagen" src="" alt="Plano de tren" class="w-full">
+      <div id="marcador" class="absolute w-4 h-4 bg-red-600 rounded-full border-2 border-white shadow-lg hidden"></div>
+    </div>
+
   </div>
 
   <footer class="max-w-xl mx-auto text-center text-gray-500 text-sm py-4 mt-16">

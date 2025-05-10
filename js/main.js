@@ -93,6 +93,46 @@ const estacionesPorLinea = {
   ]
 };
 
+const coordenadasPlanoUrquiza = {
+  "Federico Lacroze":       { top: "50%", left: "5%" },
+  "José Artigas":           { top: "50%", left: "10%" },
+  "Pedro N. Arata":         { top: "50%", left: "14%" },
+  "Doctor F. Beiró":        { top: "50%", left: "18%" },
+  "El Libertador":          { top: "50%", left: "22%" },
+  "Antonio Devoto":         { top: "50%", left: "26%" },
+  "Coronel F. Lynch":       { top: "50%", left: "30%" },
+  "Fernández Moreno":       { top: "50%", left: "34%" },
+  "Lourdes":                { top: "50%", left: "38%" },
+  "Tropezón":               { top: "50%", left: "42%" },
+  "José M. Bosch":          { top: "50%", left: "46%" },
+  "Martín Coronado":        { top: "50%", left: "50%" },
+  "Pablo Podestá":          { top: "50%", left: "54%" },
+  "Jorge Newbery":          { top: "50%", left: "58%" },
+  "Rubén Darío":            { top: "50%", left: "62%" },
+  "Ejército de los Andes":  { top: "50%", left: "66%" },
+  "Juan B. de La Salle":    { top: "50%", left: "70%" },
+  "Sargento Barrufaldi":    { top: "50%", left: "74%" },
+  "Capitán Lozano":         { top: "50%", left: "78%" },
+  "Teniente Agneta":        { top: "50%", left: "80%" },
+  "Campo de Mayo":          { top: "50%", left: "82%" },
+  "Sargento Cabral":        { top: "50%", left: "85%" },
+  "General Lemos":          { top: "50%", left: "87%" }
+};
+
+const planosPorLinea = {
+  urquiza: "imgs/planos/plano_urquiza_-_mt.png",
+  belgranoSur: "imgs/planos/plano_belgrano_sur.png",
+  belgranoNorte: "imgs/planos/plano_belgrano_norte.png",
+  sanmartin: "imgs/planos/plano_san_martin.png"
+};
+
+const coordenadasPorLinea = {
+  urquiza: coordenadasPlanoUrquiza//, TODO complete
+  //belgranoSur: coordenadasPlanoBelgranoSur,
+  //belgranoNorte: coordenadasPlanoBelgranoNorte,
+  //sanmartin: coordenadasPlanoSanMartin
+};
+
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -108,10 +148,15 @@ function getDistance(lat1, lon1, lat2, lon2) {
 function verEstacion() {
   const lineaSeleccionada = document.getElementById("linea").value;
   const resultadoDiv = document.getElementById("resultado");
+  const planoContainer = document.getElementById("planoContainer");
+  const planoImagen = document.getElementById("planoImagen");
+  const marcador = document.getElementById("marcador");
+
   resultadoDiv.innerText = "";
 
   if (!lineaSeleccionada || !estacionesPorLinea[lineaSeleccionada]) {
     resultadoDiv.innerText = "Seleccioná una línea válida.";
+    planoContainer.classList.add("hidden");
     return;
   }
 
@@ -137,10 +182,44 @@ function verEstacion() {
 
       resultadoDiv.innerHTML = `Estás cerca de <span class="text-indigo-600 font-bold">${estacionCercana.nombre}</span> (<span class="text-gray-600">${distanciaMinima.toFixed(2)} km</span>)`;
 
+      // Mostrar plano si existe
+      const planoSrc = planosPorLinea[lineaSeleccionada];
+      const coordenadas = coordenadasPorLinea[lineaSeleccionada];
+
+      if (planoSrc && coordenadas) {
+        planoImagen.src = planoSrc;
+        planoContainer.classList.remove("hidden");
+
+        const coords = coordenadas[estacionCercana.nombre];
+        if (coords) {
+          marcador.style.top = coords.top;
+          marcador.style.left = coords.left;
+          marcador.classList.remove("hidden");
+        } else {
+          marcador.classList.add("hidden");
+        }
+      } else {
+        planoContainer.classList.add("hidden");
+      }
+
     }, () => {
       resultadoDiv.textContent = "No se pudo obtener tu ubicación.";
+      planoContainer.classList.add("hidden");
     });
   } else {
     resultadoDiv.textContent = "Tu navegador no soporta geolocalización.";
+    planoContainer.classList.add("hidden");
+  }
+}
+
+function mostrarEnPlano(estacionNombre) {
+  const marcador = document.getElementById("marcador");
+  const coords = coordenadasPlanoUrquiza[estacionNombre];
+  if (coords) {
+    marcador.style.top = coords.top;
+    marcador.style.left = coords.left;
+    marcador.style.display = "block";
+  } else {
+    marcador.style.display = "none";
   }
 }
